@@ -1,0 +1,31 @@
+server:
+  port: 8090
+
+badservice:
+  host: http://localhost:8080
+  endpoints:
+    get-something: /getsomething
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      CircuitBreakerService:
+        failureRateThreshold: 50
+        minimumNumberOfCalls: 5
+        automaticTransitionFromOpenToHalfOpenEnabled: true
+        waitDurationInOpenState: 5s
+        permittedNumberOfCallsInHalfOpenState: 3
+        slidingWindowSize: 10
+        slidingWindowType: count_based
+
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: always
